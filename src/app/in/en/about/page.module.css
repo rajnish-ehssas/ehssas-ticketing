@@ -1,0 +1,78 @@
+.aboutContainer {
+  padding: 0.5rem 1.25rem; /* px-5 py-2 */
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr; /* Single-column layout */
+}
+
+.gridContainerMd {
+  grid-template-columns: repeat(1, 1fr); /* md:grid-cols-1 */
+}
+
+.title {
+  font-weight: 500; /* font-medium */
+  font-size: 2.5rem; /* text-4xl */
+  text-align: center;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.responsiveImage {
+  max-width: 100%;
+}
+
+.textBlock {
+  line-height: 1.75; /* leading-7 */
+  margin: 0.5rem 0; /* my-2 */
+  text-align: justify;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: 1fr; /* Single-column layout */
+  gap: 0.5rem; /* grid-row-gap-2 and grid-column-gap-2 */
+  padding: 0.5rem 0; /* py-2 */
+}
+
+.cardGridSm {
+  grid-template-columns: repeat(2, 1fr); /* sm:grid-cols-2 */
+}
+
+.cardGridMd {
+  grid-template-columns: repeat(3, 1fr); /* md:grid-cols-3 */
+}
+
+.card {
+  margin: 0.5rem; /* m-2 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: white;
+  padding: 1.25rem; /* p-5 */
+}
+
+.cardImage {
+  border-radius: 50%; /* rounded-full */
+  height: 8rem; /* h-32 */
+  width: 8rem; /* w-32 */
+  margin: 0 auto;
+}
+
+.cardName {
+  text-align: center;
+  font-size: 1.5rem; /* text-2xl */
+}
+
+.cardDirector {
+  text-align: center;
+}
+
+.modalButtonContainer {
+  margin: 0 auto; /* mx-auto */
+}
+

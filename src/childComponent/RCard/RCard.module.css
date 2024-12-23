@@ -1,0 +1,51 @@
+.cardContainer {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .flexRow {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .flexRowMd {
+    flex-direction: row;
+  }
+  
+  .imageContainer {
+    flex-shrink: 0;
+  }
+  
+  .image {
+    height: 12rem;
+    width: 12rem;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  .content {
+    padding: 2rem;
+  }
+  
+  .title {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.875rem;
+    color: #5a67d8; /* Indigo 500 */
+    font-weight: 600;
+  }
+  
+  .text {
+    margin-top: 0.5rem;
+    color: #a0aec0; /* Gray 500 */
+  }
+  
+  .linkContainer {
+    margin-top: 1rem;
+  }
+  

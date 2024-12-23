@@ -1,0 +1,195 @@
+.container {
+  max-width: 1200px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Poppins', sans-serif;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-evenly;
+  border-bottom: 3px solid #e0e0e0;
+  margin-bottom: 2rem;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #333333;
+  background-color: #f8f9fa;
+  border: none;
+  outline: none;
+  border-radius: 8px 8px 0 0;
+  transition: all 0.3s ease;
+}
+
+.activeTab {
+  color: #ffffff;
+  background-color: #007bff;
+  border-bottom: 4px solid #0056b3;
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup label {
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+  color: #495057;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.formGroup textarea {
+  resize: vertical;
+}
+
+.error {
+  color: #dc3545;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.submitButton {
+  padding: 0.9rem 2.4rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submitButton:hover {
+  background-color: #0056b3;
+  box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+}
+
+.accordionContainer {
+  margin-top: 2rem;
+}
+
+.accordionItem {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.accordionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.accordionHeader:hover {
+  background-color: #f1f1f1;
+}
+
+.activeHeader {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+.accordionBody {
+  padding: 1.5rem;
+  background-color: #ffffff;
+  border-top: 1px solid #dee2e6;
+}
+
+.ticketTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+
+.ticketTable th,
+.ticketTable td {
+  padding: 1rem;
+  text-align: left;
+  border: 1px solid #dee2e6;
+}
+
+.ticketTable th {
+  background-color: #f1f1f1;
+  font-weight: 700;
+}
+
+.ticketTable tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.noTickets {
+  text-align: center;
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin-top: 3rem;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .tabs {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tab {
+    font-size: 1rem;
+    padding: 1.2rem;
+    margin: 0.5rem 0;
+  }
+
+  .formContainer {
+    gap: 1.5rem;
+  }
+
+  .accordionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.2rem;
+  }
+
+  .submitButton {
+    padding: 1rem 2.2rem;
+  }
+}

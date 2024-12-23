@@ -1,0 +1,118 @@
+/* General Layout */
+.container {
+    font-family: "Roboto", sans-serif;
+    color: #333;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+  }
+  
+  /* Hero Section */
+  .hero {
+    background: linear-gradient(135deg, #ff7b54, #ffb26b);
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
+  }
+  
+  .heroTitle {
+    font-size: 2.8rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .heroSubtitle {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+  
+  /* Section Titles */
+  .sectionTitle {
+    font-size: 2.2rem;
+    text-align: center;
+    margin: 50px 0 30px;
+    color: #ff7b54;
+  }
+  
+  /* Product Section */
+  .products {
+    padding: 40px 20px;
+  }
+  
+  .productGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+  }
+  
+  .productCard {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%;
+  }
+  
+  .productCard:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .productIcon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #ff7b54;
+  }
+  
+  .productName {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  .productDescription {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.6;
+  }
+  
+  /* Call to Action Section */
+  .callToAction {
+    background: #ff7b54;
+    color: white;
+    text-align: center;
+    padding: 50px 20px;
+  }
+  
+  .ctaTitle {
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+  }
+  
+  .ctaDescription {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+  }
+  
+  .ctaButton {
+    background: white;
+    color: #ff7b54;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .ctaButton:hover {
+    background: #ffb26b;
+    color: white;
+  }
+  

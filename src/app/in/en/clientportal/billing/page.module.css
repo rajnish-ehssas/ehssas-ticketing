@@ -1,0 +1,54 @@
+.billingSection {
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.planDetails {
+    margin-bottom: 20px;
+}
+
+.planDetails h3 {
+    font-size: 1.5rem;
+}
+
+.paymentButton {
+    margin: 3px;
+}
+
+.planDetails button {
+    background-color: #ff6b6b;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.planDetails button:hover {
+    background-color: #ff4c4c;
+}
+
+.changePlan {
+    margin-top: 10px;
+}
+
+.paymentMethods h3 {
+    font-size: 1.5rem;
+}
+
+.billingHistory table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.billingHistory th,
+.billingHistory td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    
+}
+
+.billingText{
+     padding-top: 10px;
+}

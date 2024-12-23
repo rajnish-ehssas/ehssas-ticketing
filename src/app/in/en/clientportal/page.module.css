@@ -1,0 +1,66 @@
+/* styles.module.css */
+
+/* General layout for the portal */
+.portalContainer {
+  display: flex;
+  min-height: 100vh; /* Full viewport height */
+  background-color: #f9f9f9; /* Light background color for content area */
+  font-family: Arial, sans-serif;
+}
+
+/* Sidebar styles */
+.sidebar {
+  width: 250px;
+  background-color: #2c3e50; /* Dark blue-gray sidebar */
+  color: #ecf0f1; /* Light text color */
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.sidebarTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ecf0f1;
+}
+
+/* Navigation list styles */
+.navList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navList li {
+  margin-bottom: 15px;
+}
+
+/* Navigation link styles */
+.navLink {
+  text-decoration: none;
+  color: #ecf0f1;
+  font-size: 1rem;
+  font-weight: 500;
+  display: block;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navLink:hover {
+  background-color: #34495e; /* Slightly darker hover effect */
+  color: #ffffff; /* Ensure text stays visible */
+}
+
+.navLink:active {
+  background-color: #1abc9c; /* Active state background */
+}
+
+/* Content area styles */
+.content {
+  flex: 1;
+  padding: 20px;
+  background-color: #ffffff; /* White background for content */
+}

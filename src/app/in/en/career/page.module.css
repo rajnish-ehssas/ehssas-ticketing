@@ -1,0 +1,70 @@
+.careerContainer {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    gap: 20px;
+  }
+  
+  .leftSection {
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    max-width: 300px;
+  }
+  
+  .leftSection ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .leftSection li {
+    margin: 10px 0;
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+  }
+  
+  .leftSection li:hover {
+    color: darkblue;
+  }
+  
+  .rightSection {
+    flex: 2;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+  }
+  
+  .candidateForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .candidateForm label {
+    font-weight: bold;
+  }
+  
+  .candidateForm input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .applyButton,
+  .submitButton {
+    padding: 10px 15px;
+    margin-top: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .applyButton:hover,
+  .submitButton:hover {
+    background-color: #0056b3;
+  }
+  
