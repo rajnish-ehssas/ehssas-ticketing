@@ -118,6 +118,7 @@ import 'server-only'
 import { JWTPayload, SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers';
 import { JWT_SECRET_KEY } from '@/env';
+import { NextRequest, NextResponse } from 'next/server';
 
 const secretKey = JWT_SECRET_KEY
 const encodedKey = new TextEncoder().encode(secretKey)
@@ -181,4 +182,42 @@ export async function deleteSession() {
   const cookieStore = await cookies()
   cookieStore.delete('session')
   cookieStore.delete('refresh-session')
+}
+
+export async function authentication(request: NextRequest) {
+  const session = request.cookies.get("session")?.value;
+  if (!session) return;
+
+  // Refresh the session so it doesn't expire
+  // const parsed = await decrypt(session);
+  // console.log('parsed', parsed);
+  // let rolesArray = [];
+  // if (parsed?.roles) {
+  //     if (Array.isArray(parsed.roles)) {
+  //         rolesArray = parsed.roles; // It's already an array
+  //     } else if (typeof parsed.roles === 'object') {
+  //         rolesArray = Object.values(parsed.roles); // Convert object to array
+  //     } else if (typeof parsed.roles === 'string') {
+  //         rolesArray = parsed.roles.split(','); // Split string if roles are comma-separated
+  //     }
+  // }
+  // const isAdmin = rolesArray.includes('ADMIN');
+  // const isClient = rolesArray.includes('CLIENT');
+
+  const res = NextResponse.next();
+  // const cookieStore = await cookies()
+  // const UserValue = JSON.stringify({
+  //   isAuthenticated: true,
+  //   admin: isAdmin,
+  //   client: isClient,
+  //   userId: parsed?.userid,
+  // });
+  // cookieStore.set('userData', UserValue, {
+  //   httpOnly: true,
+  //   secure: true,
+  //   sameSite: 'lax',
+  //   path: '/',
+  // })
+  
+  return res;
 }

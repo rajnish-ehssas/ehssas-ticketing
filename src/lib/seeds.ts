@@ -18,5 +18,4 @@
 //     await UserModel.insertMany(users);
 //     await TicketModel.insertMany(tickets);
 
-//     console.log('Database seeded successfully');
 // };

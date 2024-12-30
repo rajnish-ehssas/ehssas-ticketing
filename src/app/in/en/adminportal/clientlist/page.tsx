@@ -64,7 +64,6 @@ const ClientList = () => {
     }
 
     // const handleTabClick = () => {
-    //     console.log('working:', handleTabClick);
     // }
     return (
         <div className={styles.clientList}>

@@ -20,9 +20,7 @@ const ForgotPassword = () => {
         },
         body: JSON.stringify({ email }),
       });
-      console.log('response', response);
       const data = await response.json();
-      console.log('data', data);
       if (response.ok) {
         setMessage(data.message);
       } else {

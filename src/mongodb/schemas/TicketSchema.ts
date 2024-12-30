@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IClient extends Document {
+
   email: string;
   companyName: string;
   serviceType: string;
@@ -51,12 +52,12 @@ export const Client: Model<IClient> = mongoose.models.Client || mongoose.model<I
 
 // Ticket interface and schema
 export interface ITicket extends Document {
+  clientReferenceID: mongoose.Schema.Types.ObjectId; 
   name: string;
   email: string;
   contactNumber: string;
   helpTopic: string;
   product?: string;
-  // domainName?: string;
   subject: string;
   message: string;
   status: "Open" | "Closed";
@@ -96,12 +97,13 @@ const ticketSchema: Schema = new Schema({
     required: [true, "Product is required."],
     trim: true,
   },
-  // domainName: {
-  //   type: String,
-  //   default: null,
-  //   required: [true, "Domain name is required."],
-  //   trim: true,
-  // },
+  domainName: {
+    type: String,
+    default: null,
+    required: [true, "Domain name is required."],
+    trim: true,
+  },
+
   subject: {
     type: String,
     required: [true, "Subject is required."],

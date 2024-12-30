@@ -40,7 +40,6 @@ const Profile: React.FC = () => {
             if (storedUser) {
                 const parsedUser: IClient = JSON.parse(storedUser);
                 setUser(parsedUser);
-                console.log('parsedUser:', parsedUser);
 
                 setLoading(false);
             } else {

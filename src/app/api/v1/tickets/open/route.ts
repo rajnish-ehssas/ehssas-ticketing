@@ -10,6 +10,7 @@ export async function GET() {
 
         // Retrieve client details and only the openTickets array
         const clientData = await Ticket.find(
+            
             {}, // No filter: get all documents
             {
                 email: 1,
@@ -20,10 +21,11 @@ export async function GET() {
                 "Tickets.openTickets": 1,
                 _id: 0, // Exclude _id field if not needed
             }
+        
         );
+      
 
         // Log the fetched data
-
         // Return the client data as JSON
         return NextResponse.json({ data: clientData, status: 200 });
     } catch (error) {

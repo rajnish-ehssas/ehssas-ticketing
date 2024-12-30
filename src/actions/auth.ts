@@ -8,6 +8,7 @@ import { NextResponse } from 'next/server';
 
 export async function signup(state: LoginValidation, formData: FormData) {
     // Validate form fields
+    
     const validatedFields = loginSchema.safeParse({
         email: formData.get('email'),
         password: formData.get('password'),
@@ -40,6 +41,7 @@ export async function signup(state: LoginValidation, formData: FormData) {
     }
     // Call the provider or db to create a user...
 }
+
 export async function logout() {
     deleteSession()
     redirect('/in/en/login')

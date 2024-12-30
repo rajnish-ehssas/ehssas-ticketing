@@ -1,18 +1,22 @@
 'use client'
 import clsx from "clsx";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useActionState, useEffect, useRef, useState } from "react";
 import { FaBars, FaPhoneAlt } from "react-icons/fa"; // Import icons
 import styles from "./Header.module.css";
 import Link from 'next/link';
 import Image from "next/image";
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
+import { authHandle } from "@/actions/authHandle";
+import { ActionResponseAuth } from "@/types/address";
 
-
-interface IUseData {
-    isAuthenticated: string
+const initialState: ActionResponseAuth = {
+    login: false,
+    message: '',
 }
 const Header: React.FC = () => {
     const router = useRouter();
+    const [state, action, isPanding] = useActionState(authHandle, initialState)
+    console.log('state', state);
 
     const [isNavOpen, setIsNavOpen] = useState<boolean>(false);
     const headerRef = useRef<HTMLDivElement | null>(null);
@@ -30,36 +34,27 @@ const Header: React.FC = () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-    // State for managing login status
-    // const [userDetails, setUserDetails] = useState<UserData | null>(JSON.parse(localStorage.getItem("userData") as string));
-    // const userDetails = JSON.parse(localStorage.getItem("userData") as string)
-    // console.log('userDetails', userDetails);
-    const [userDetails, setUserDetails] = useState<IUseData | null>(null);
-
-    useEffect(() => {
-        // Get data from localStorage
-        const storedValue = JSON.parse(localStorage.getItem("userData") as string)
-        if (storedValue) {
-            setUserDetails(storedValue);
-        }
-    }, []);
 
     const logouthandle = async () => {
         try {
             await fetch('/api/v1/users/logout', { method: 'POST' });
             localStorage.removeItem("userData");
-            router.refresh();
             router.replace('/in/en/login');
         } catch (error) {
             console.error("Failed to log out:", error);
         }
     };
+    const [userData, setUserData] = useState<string | null>(null);
+
+    useEffect(() => {
+        const userData = localStorage.getItem("userData")
+        setUserData(userData || null)
+    }, [userData, state, state?.login, state?.message, isPanding])
 
     return (
         <div className={styles.hdrContainer} ref={headerRef}>
             <div className={styles.hdrLogo}>
-                {/* Logo redirects to home page */}
-                <Link href="/">
+                <Link href="/" tabIndex={-1}>
                     <Image src='/edlogonormal.png' alt="Logo" className={styles.hdrLogoImg} width={100} height={100} />
                 </Link>
             </div>
@@ -81,15 +76,15 @@ const Header: React.FC = () => {
                 <Link href="/in/en/contact" className={styles.hdrNavLink}>
                     Contact
                 </Link>
-                {userDetails?.isAuthenticated ?
-                    <div onClick={logouthandle} className={styles.hdrNavLink} >
-                        Logout
-                    </div>
-                    :
-                    <Link href="/in/en/login" className={styles.hdrNavLink} >
-                        Login
-                    </Link>
-                }
+                <form action={action}>
+                    {userData ?
+                        <button className={styles.hdrNavLinkLogout} onClick={logouthandle}>Logout</button>
+                        :
+                        <button className={styles.hdrNavLinkLogout} onClick={() => redirect('/in/en/login')} >
+                            Login
+                        </button>
+                    }
+                </form>
             </nav>
 
             {/* Icons for smaller screens */}

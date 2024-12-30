@@ -7,8 +7,8 @@ export interface SessionPayload {
   
   export interface UserData {
     isAuthenticated: boolean;
-    isAdmin: boolean;
-    isClient: boolean;
+    isAdmin?: boolean;
+    isClient?: boolean;
     email?: string;  // Optional, as `resData?.user?.email` might be undefined
     userId?: string; // Optional, as `resData?.user?._id` might be undefined
   }

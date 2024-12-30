@@ -11,7 +11,6 @@ export async function POST(request: NextRequest) {
     // Parse the request body
     const body = await request.json();
     const { email, companyName, serviceType, domain, saasProductName } = body;
-    // console.log("Received data:", { email, companyName, serviceType, domain, saasProductName });
 
     // Validate mandatory fields
     if (!email || !companyName || !serviceType) {

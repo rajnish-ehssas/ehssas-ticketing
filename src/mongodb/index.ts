@@ -13,7 +13,6 @@ export const connectToDatabase = async () => {
   }
   // // if we want to change to database Name from .env  Disconnect from MongoDB after operations 
   // await disconnect();
-  // console.log("Disconnected from the database.");
   try {
     console.log('=> MongoDB connecting...');
     await mongoose.connect(MONGODB_URI, {

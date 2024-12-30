@@ -61,7 +61,6 @@ const TicketManager = () => {
       });
       if (res.ok) {
         const response = await res.json();
-        console.log(response);
         // Map and format the response data
         const formattedTickets: Ticket[] = response.data.flatMap((client: Client) =>
           client.Tickets.openTickets.map((ticket: TicketInput, idx: number) => ({
@@ -81,17 +80,16 @@ const TicketManager = () => {
         );
 
         setOpenTickets(formattedTickets);
+       
       }
     } catch (error) {
       console.error("Error fetching open tickets:", error);
     }
   };
 
-  console.log(openTickets)
   // Function to fetch closed tickets from the backend
   const fetchClosedTickets = async () => {
     try {
-      console.log("Fetching closed tickets...");
       // You can implement fetching closed tickets here in a similar way
     } catch (error) {
       console.error("Error fetching closed tickets:", error);

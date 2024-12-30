@@ -8,7 +8,6 @@
 //     const userNavigatinRoute = req.nextUrl.pathname
 //     const cookieStore = await cookies()
 //     const token = cookieStore.get('token')?.value
-//     console.log('Middleware token:', token);
 
 //     /*-----------------------------------------------Back-end side start--------------------------------------------------------- */
 //     const apiPublic = ['/api/v1/users/login']
@@ -55,9 +54,12 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers'
-import { decrypt, updateSession } from './lib/session';
+import { authentication, decrypt, updateSession } from './lib/session';
 
 export async function middleware(req: NextRequest) {
+    await authentication(req);
+    console.log('AAAAAAAAAAAAAAAreq', req);
+    
     const userNavigatinRoute = req.nextUrl.pathname
     const cookieStore = await cookies()
     const cookie = cookieStore.get('session')?.value

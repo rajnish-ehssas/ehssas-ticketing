@@ -53,12 +53,10 @@ const Billing: React.FC = () => {
 
   const handleCancelPlan = () => {
     alert('Your plan has been canceled.');
-    // console.log('Your plan has been canceled');
   };
 
   const handleAddPaymentMethod = () => {
     alert('Add payment method');
-    // console.log('Add payment method');
   };
 
   return (

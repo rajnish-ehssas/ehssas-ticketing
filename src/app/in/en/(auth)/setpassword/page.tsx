@@ -28,10 +28,7 @@ const SetPassword: React.FC = () => {
                 },
                 body: JSON.stringify({ password, tempPassword, userId }),
             });
-            console.log('response', response);
             const data = await response.json();
-            console.log('data.......', data);
-
             if (response.ok) {
                 setErrorMessage(data.message);
             } else {

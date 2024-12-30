@@ -19,10 +19,10 @@ const TicketSystem: React.FC = () => {
     contactNumber: "",
     helpTopic: "",
     product: "",
-    domain: "",
     subject: "",
     message: "",
     status: "Open",
+
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -44,7 +44,6 @@ const TicketSystem: React.FC = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(validateData),
       });
-
       if (res.ok) {
         const newTicket = await res.json();
         setTickets((prevTickets) => [...prevTickets, newTicket]);
@@ -54,12 +53,13 @@ const TicketSystem: React.FC = () => {
           contactNumber: "",
           helpTopic: "",
           product: "",
-          domain: "",
           subject: "",
           message: "",
           status: "Open",
+
         });
       }
+
     } catch (error: unknown) {
       if (error instanceof ZodError) {
         const fieldErrors: Record<string, string> = {};
@@ -95,6 +95,7 @@ const TicketSystem: React.FC = () => {
     }
   }, [activeTab]);
 
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -105,7 +106,6 @@ const TicketSystem: React.FC = () => {
         if (res.ok) {
 
           const data = await res.json();
-          console.log(data)
           setClientData(data?.response);
         }
       } catch (error) {
@@ -115,7 +115,7 @@ const TicketSystem: React.FC = () => {
     fetchProducts();
   }, []);
 
-  console.log(clientData);
+
 
   const renderTabContent = () => {
     if (activeTab === "form") {
@@ -159,8 +159,6 @@ const TicketSystem: React.FC = () => {
               <option value={clientData?.products}>
                 {clientData?.products}
               </option>
-
-
             </select>
 
 
@@ -201,10 +199,11 @@ const TicketSystem: React.FC = () => {
     const filteredTickets = activeTab === "Open" ? tickets.filter((ticket) => ticket.status === "Open")
       : tickets.filter((ticket) => ticket.status === "Closed");
 
+
     return (
       <div className={styles.accordionContainer}>
         {filteredTickets.length > 0 ? (
-          filteredTickets.map((ticket, index) => (
+          filteredTickets?.map((ticket, index) => (
             <div key={index} className={styles.accordionItem}>
               <div
                 className={`${styles.accordionHeader} ${activeAccordion === index ? styles.activeHeader : ""}`}
@@ -269,6 +268,7 @@ const TicketSystem: React.FC = () => {
         >
           Raise Ticket
         </button>
+
         <button
           className={`${styles.tab} ${activeTab === "Open" ? styles.activeTab : ""}`}
           onClick={() => setActiveTab("Open")}

@@ -30,7 +30,6 @@ const Page = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // console.log("Submitted data:", formData);
 
     try {
       const res = await fetch("/api/v1/client", {
@@ -40,7 +39,6 @@ const Page = () => {
       });
 
       if (res.ok) {
-        // console.log("Client added successfully");
         fetchClients(); // Refresh the client list
         setFormData({
           email: "",

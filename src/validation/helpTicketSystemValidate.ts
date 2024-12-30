@@ -16,12 +16,11 @@ export const ticketSystemValidate = z.object({
     status: z.enum(["Open", "Close"], { message: "Status must be 'Open' or 'Close'" }),
 });
 
-// export type UserQueryValidation = z.infer<typeof ticketSystemValidate>;
+export type UserQueryValidation = z.infer<typeof ticketSystemValidate>;
 
 // const validateUserQuery = (data: any) => {
 //     try {
 //         const validatedData = ticketSystemValidate.parse(data);
-//         // console.log("Validated data:", validatedData);
 //         return validatedData;
 //     } catch (err) {
 //         if (err instanceof z.ZodError) {
@@ -29,3 +28,7 @@ export const ticketSystemValidate = z.object({
 //         }
 //     }
 // };
+
+
+
+

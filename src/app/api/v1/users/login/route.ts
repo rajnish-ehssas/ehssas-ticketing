@@ -92,7 +92,9 @@ export async function POST(request: NextRequest) {
     await createSession(user._id, user.roles); // for jose
     await createRefreshSession(user._id, user.roles)
     const response = NextResponse.json({ message: 'Login successful', user: user }, { status: 200 });
+    response.headers.set('loginData', "hello thus is logine")
     return response;
+    
   } catch (error) {
     return NextResponse.json({ error: error }, { status: 500 });
     // return NextResponse.json({ error: error || "Internal Server Error." }, { status: 500 });

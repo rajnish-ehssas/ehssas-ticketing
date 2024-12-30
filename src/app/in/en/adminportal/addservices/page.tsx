@@ -15,7 +15,6 @@ const Page = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // console.log("Submitted data:", formData);
 
     e.preventDefault();
     try {
@@ -26,7 +25,6 @@ const Page = () => {
         body: JSON.stringify(formData),
       });
 
-      //console.log("res->", res);
       //   const newTicket = await res.json();
       //   setTickets((prevTickets) => [...prevTickets, newTicket]);
       //   setFormData({

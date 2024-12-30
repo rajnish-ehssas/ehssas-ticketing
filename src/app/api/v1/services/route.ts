@@ -2,14 +2,12 @@ import { NextResponse } from 'next/server';
 
 export async function POST() {
     // const body = await request.json();
-    // console.log("Request received inside services post controller:", body);
 //   try {
 //     // Connect to the database
 //     await connectToDatabase();
 
 //     // Parse the request body
 //     const body = await request.json();
-//     console.log("Request received:", body);
 
 //     // Validate required fields (optional but recommended)
 //     const { email, companyName, services } = body;
