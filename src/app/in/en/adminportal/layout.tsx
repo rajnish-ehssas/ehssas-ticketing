@@ -38,11 +38,11 @@ export default function DashboardLayout({
               Ticket Manager
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link href="/in/en/adminportal/clientlist" className={styles.navLink}>
               Client List
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link href="/in/en/adminportal/managePayments" className={styles.navLink}>
               Manage Payments

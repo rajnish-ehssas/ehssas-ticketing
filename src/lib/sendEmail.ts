@@ -62,28 +62,39 @@ export const clientRegistrationMail = (data: RegisterMailOptions): void => {
     <p><strong>Password:</strong> ${password}</p>
     <p>Please keep your credentials secure.</p>
   `;
-
   const mailOptions = getMailOptions(email, 'Registration Successful', html);
   sendEmail(mailOptions);
 };
 
-// Feature 2: Send forgot password email
-// export const forgotPasswordMail = (email: string): void => {
-//   const otp = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
-//   const html = `
-//     <p>Dear User,</p>
-//     <p>You requested to reset your password. Use the OTP below to complete the process:</p>
-//     <h2>${otp}</h2>
-//     <p>If you did not request this, please ignore this email.</p>
-//   `;
+export const ticketGenerateMail = (email: string, ticketNumber: string): void => {
+  const html = `
+    <p>Dear User,</p>
+    <p>We have successfully generated your support ticket.</p>
+    <p><strong>Ticket Number:</strong> ${ticketNumber}</p>
+    <p>Our team will get back to you shortly. Thank you for reaching out!</p>
+    <p>If you have further queries, reply to this email.</p>
+  `;
 
-//   const mailOptions = getMailOptions(email, 'Forgot Password Request', html);
-//   sendEmail(mailOptions);
-// };
+  const mailOptions = getMailOptions(email, 'Ticket Generated Successfully', html);
+  sendEmail(mailOptions);
+};
+
+export const ticketClosedMail = (email: string, ticketNumber: string): void => {
+  const html = `
+    <p>Dear User,</p>
+    <p>We are writing to inform you that your support ticket has been closed.</p>
+    <p><strong>Ticket Number:</strong> ${ticketNumber}</p>
+    <p>If you have any additional concerns, feel free to create a new ticket or reply to this email.</p>
+    <p>Thank you for choosing our support services!</p>
+  `;
+
+  const mailOptions = getMailOptions(email, 'Ticket Closed Notification', html);
+  sendEmail(mailOptions);
+};
+
 
 export const forgotPasswordMail = (data: ForgotPasswordData): void => {
   const { email, origin, tempPassword, userId } = data;
-
   const html = `
     <div class="content" style="font-family: Arial, sans-serif; line-height: 1.5;">
       <h2 style="font-weight: lighter;">Hello ${email},</h2>
@@ -99,7 +110,6 @@ export const forgotPasswordMail = (data: ForgotPasswordData): void => {
       <h4>Team Ehssas Digitech Pvt. Ltd</h4>
     </div>
   `;
-
   const mailOptions = getMailOptions(email, 'Password Reset Request', html);
   sendEmail(mailOptions);
 };

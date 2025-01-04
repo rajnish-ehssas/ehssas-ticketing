@@ -13,7 +13,6 @@ const messageSchema = new Schema(
 // Define a sub-schema for a Ticket
 const ticketItemSchema = new Schema(
   {
-    
     RaisedBy: { type: String },
     email: { type: String },
     contactNumber: { type: String },
@@ -30,7 +29,6 @@ const ticketItemSchema = new Schema(
 
 // Define the main Ticket Schema
 export interface ITicket extends Document {
-
   clientReferenceID: string; // Required client ID reference
   Tickets: {
     openTickets?: typeof ticketItemSchema[];
@@ -41,7 +39,7 @@ export interface ITicket extends Document {
 
 const ticketSchema = new Schema({
   clientReferenceID: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "Client",
     required: true,
     unique: true, // Ensure only one ticket document per client

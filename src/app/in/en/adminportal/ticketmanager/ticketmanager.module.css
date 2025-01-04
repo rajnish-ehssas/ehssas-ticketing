@@ -74,3 +74,74 @@
     font-weight: bold;
   }
   
+  
+.accordionItem {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.accordionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.activeHeader {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+.accordionBody {
+  padding: 1.5rem;
+  background-color: #ffffff;
+  border-top: 1px solid #dee2e6;
+}
+
+.ticketTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+
+.ticketTable th,
+.ticketTable td {
+  padding: 1rem;
+  text-align: left;
+  border: 1px solid #dee2e6;
+}
+
+.ticketTable th {
+  background-color: #f1f1f1;
+  font-weight: 700;
+}
+
+.ticketTable tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+@media (max-width: 768px) {
+  .tabs {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tab {
+    font-size: 1rem;
+    padding: 1.2rem;
+    margin: 0.5rem 0;
+  }
+
+  .accordionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.2rem;
+  }
+}

@@ -2,7 +2,7 @@
 
 import { z } from 'zod'
 import type { ActionResponse, AddressFormData } from '../types/address'
-import { connectToDatabase } from '@/mongodb';
+// import { connectToDatabase } from '@/mongodb';
 import { Client } from '@/mongodb/schemas/ClientSchema';
 import bcrypt from 'bcrypt';
 import { createRefreshSession, createSession } from '@/lib/session';
@@ -20,7 +20,7 @@ const loginSchema = z.object({
 })
 
 export async function submitLogin(prevState: ActionResponse | null, formData: FormData): Promise<ActionResponse> {
-    console.log('prevState', prevState);
+    // console.log('prevState', prevState);
     // await new Promise((resolve) => setTimeout(resolve, 1000))
     try {
         const rawData: AddressFormData = {
@@ -35,9 +35,10 @@ export async function submitLogin(prevState: ActionResponse | null, formData: Fo
                 errors: validatedData.error.flatten().fieldErrors,
             }
         }
-        await connectToDatabase();
+        // await connectToDatabase();
         const { email, password } = validatedData.data;
         const user = await Client.findOne({ email });
+        // console.log('user:', user);
         if (!user) {
             return {
                 success: false,

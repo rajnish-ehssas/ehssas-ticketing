@@ -2,28 +2,32 @@
 import React, { useState, useEffect } from "react";
 import styles from "./page.module.css";
 import { ticketSystemValidate } from "@/validation/helpTicketSystemValidate";
-import { ZodError } from "zod";
+// import { ZodError } from "zod";
 import { BiExpand, BiCollapse } from "react-icons/bi";
 import { IClient } from "@/mongodb/schemas/ClientSchema";
-import { ITicket } from "@/mongodb/schemas/TicketSchema";
+import { ITicket } from "@/mongodb/schemas/Tickets";
+import RInput from "@/childComponent/RInput";
+import { IoMdArrowRoundForward } from "react-icons/io";
+import RButton from "@/childComponent/RButton";
 
 const TicketSystem: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("form");
+  const [activeTab, setActiveTab] = useState<"form" | "Open" | "Closed">("form");
   const [clientData, setClientData] = useState<IClient | null>(null);
   const [tickets, setTickets] = useState<ITicket[]>([]);
   const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
 
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
+    contactEmail: "",
     contactNumber: "",
     helpTopic: "",
-    product: "",
+    chooseYourProduct: "",
+    domain: "",
+    saasProductName: "",
     subject: "",
-    message: "",
-    status: "Open",
-
+    messages: "",
   });
+  const [messageInputs, setMessageInputs] = useState<{ [key: number]: string }>({});
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -38,73 +42,71 @@ const TicketSystem: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // console.log('formData:', formData);
       const validateData = ticketSystemValidate.parse(formData);
+      // console.log('validateData:', validateData);
       const res = await fetch("/api/v1/tickets", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(validateData),
       });
-      if (res.ok) {
-        const newTicket = await res.json();
-        setTickets((prevTickets) => [...prevTickets, newTicket]);
+      // console.log('res:', res);
+      const newTicket = await res.json();
+      if (!res.ok) {
+        // console.log('newTicket ERR:', newTicket);
+        setErrors({ form: newTicket.error });
+        return;
+      } else {
+        // console.log('newTicket ok:', newTicket);
+        setErrors({ form: "" });
         setFormData({
           name: "",
-          email: "",
+          contactEmail: "",
           contactNumber: "",
           helpTopic: "",
-          product: "",
+          chooseYourProduct: "",
+          domain: "",
+          saasProductName: "",
           subject: "",
-          message: "",
-          status: "Open",
-
+          messages: "",
         });
       }
-
     } catch (error: unknown) {
-      if (error instanceof ZodError) {
-        const fieldErrors: Record<string, string> = {};
-        error.errors.forEach((err) => {
-          fieldErrors[err.path[0]] = err.message;
-        });
-        setErrors(fieldErrors);
-      } else {
-        console.error("Unexpected error:", error);
-      }
+      console.error("Error submitting form:", error);
+      setErrors({ form: "An unexpected error occurred. Please try again." });
     }
   };
-
   const toggleAccordion = (index: number) => {
     setActiveAccordion(activeAccordion === index ? null : index);
   };
 
-  const fetchTickets = async (status: string) => {
-    try {
-      const res = await fetch(`/api/v1/tickets?status=${status}`);
-      if (res.ok) {
-        const data: ITicket[] = await res.json();
-        setTickets(data);
-      }
-    } catch (error) {
-      console.error(`Error fetching ${status} tickets:`, error);
-    }
+  const handleMessageChange = (index: number, value: string) => {
+    setMessageInputs(prevState => ({
+      ...prevState,
+      [index]: value,
+    }));
   };
 
   useEffect(() => {
-    if (activeTab !== "form") {
-      fetchTickets(activeTab);
-    }
-  }, [activeTab]);
-
+    const fetchOpenTickets = async () => {
+      try {
+        const status = `status=${activeTab}`;
+        const res = await fetch(`/api/v1/tickets?${status}`);
+        if (res.ok) {
+          const response = await res.json();
+          setTickets(response);
+        }
+      } catch (error) {
+        console.error("Error fetching open tickets:", error);
+      }
+    };
+    fetchOpenTickets()
+  }, [activeTab, messageInputs]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("/api/v1/products", {
-          method: "GET",
-          credentials: "include",
-        });
+        const res = await fetch("/api/v1/products");
         if (res.ok) {
-
           const data = await res.json();
           setClientData(data?.response);
         }
@@ -115,7 +117,39 @@ const TicketSystem: React.FC = () => {
     fetchProducts();
   }, []);
 
+  const handleUpdateTicket = async (ticket: ITicket, index: number) => {
+    try {
+      const res = await fetch("/api/v1/tickets", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ticketId: ticket._id,
+          message: messageInputs[index],
+        }),
+      });
 
+      if (!res.ok) {
+        const errorData = await res.json();
+        setMessageInputs(prevState => ({
+          ...prevState,
+          [index]: '',
+        }));
+        throw new Error(errorData.error || "Failed to update ticket");
+      } else {
+        // const updatedTicket = await res.json();
+        setMessageInputs(prevState => ({
+          ...prevState,
+          [index]: '',
+        }));
+        // console.log("Ticket successfully updated:", updatedTicket);
+      }
+
+    } catch (error: unknown) {
+      console.error("Error updating ticket:", error);
+    }
+  }
 
   const renderTabContent = () => {
     if (activeTab === "form") {
@@ -131,9 +165,9 @@ const TicketSystem: React.FC = () => {
               {errors.name && <p className={styles.error}>{errors.name}</p>}
             </div>
             <div className={styles.formGroup}>
-              <label htmlFor="email">Contact Email</label>
-              <input id="email" name="email" type="email" value={formData.email} onChange={handleInputChange} />
-              {errors.email && <p className={styles.error}>{errors.email}</p>}
+              <label htmlFor="contactEmail">Contact Email</label>
+              <input multiple id="contactEmail" name="contactEmail" type="email" value={formData.contactEmail} onChange={handleInputChange} />
+              {errors.contactEmail && <p className={styles.error}>{errors.contactEmail}</p>}
             </div>
             <div className={styles.formGroup}>
               <label htmlFor="contactNumber">Contact Number</label>
@@ -152,25 +186,20 @@ const TicketSystem: React.FC = () => {
             {errors.helpTopic && <p className={styles.error}>{errors.helpTopic}</p>}
           </div>
           <div className={styles.formGroup}>
-            <label htmlFor="product">Choose Your Product</label>
-            <select id="product" name="product" value={formData.product} onChange={handleInputChange}>
+            <label htmlFor="chooseYourProduct">Choose Your Product</label>
+            <select id="chooseYourProduct" name="chooseYourProduct" value={formData.chooseYourProduct} onChange={handleInputChange}>
               <option value="none">--Select--</option>
-
               <option value={clientData?.products}>
                 {clientData?.products}
               </option>
             </select>
-
-
-            {errors.product && <p className={styles.error}>{errors.product}</p>}
+            {errors.chooseYourProduct && <p className={styles.error}>{errors.chooseYourProduct}</p>}
           </div>
-          {clientData?.products?.includes("webApp") && (
+          {clientData?.products?.includes("webApp") ? (
             <div className={styles.formGroup}>
-              <label htmlFor="domainName">Choose Your Domain Name</label>
-              <select
-                id="domainName"
-                name="domainName"
-                // value={formData.domainName}
+              <label htmlFor="domain">Choose Your Domain Name</label>
+              <select id="domain" name="domain"
+                // value={formData.domain}
                 onChange={handleInputChange}
               >
                 <option value="none">--Select--</option>
@@ -179,6 +208,11 @@ const TicketSystem: React.FC = () => {
                 </option>
               </select>
             </div>
+          ) : (
+            <div className={styles.formGroup}>
+              <label htmlFor="saasProductName">Choose Your saas Product Name</label>
+              <input id="saasProductName" name="saasProductName" value={formData.saasProductName} onChange={handleInputChange} />
+            </div>
           )}
           <div className={styles.formGroup}>
             <label htmlFor="subject">Subject</label>
@@ -186,77 +220,190 @@ const TicketSystem: React.FC = () => {
             {errors.subject && <p className={styles.error}>{errors.subject}</p>}
           </div>
           <div className={styles.formGroup}>
-            <label htmlFor="message">Message</label>
-            <textarea id="message" name="message" rows={3} value={formData.message} onChange={handleInputChange} />
-            {errors.message && <p className={styles.error}>{errors.message}</p>}
+            <label htmlFor="messages">Message</label>
+            <textarea id="messages" name="messages" rows={3} value={formData.messages} onChange={handleInputChange} />
+            {errors.messages && <p className={styles.error}>{errors.messages}</p>}
           </div>
           <button className={styles.submitButton} onClick={handleSubmit}>
             Raise Ticket
           </button>
         </div>
       );
+    } else if (activeTab === "Open") {
+      return (
+        <div className={styles.accordionContainer}>
+          {tickets.length ?
+            (
+              tickets?.map((ticket: ITicket, index: number) => (
+                <div key={index} className={styles.accordionItem}>
+                  <div
+                    className={`${styles.accordionHeader} ${activeAccordion === index ? styles.activeHeader : ""}`}
+                    onClick={() => toggleAccordion(index)}
+                  >
+                    <div><strong>Ticket Number:</strong>{String(ticket?._id)}</div>
+                    <div>
+                      <strong>Status:</strong> {activeTab}
+                    </div>
+                    {/* <div>
+                      <strong>Subject:</strong> {ticket.subject}
+                    </div> */}
+                    <span>
+                      {activeAccordion === index ? <BiCollapse /> : <BiExpand />}
+                    </span>
+                  </div>
+                  {activeAccordion === index && (
+                    <div className={styles.accordionBody}>
+                      <table className={styles.ticketTable}>
+                        <thead>
+                          <tr>
+                            <th><strong>Name</strong></th>
+                            <th><strong>Email</strong></th>
+                            <th><strong>Contact Number</strong></th>
+                            <th><strong>Help Topic</strong></th>
+                            <th><strong>Product</strong></th>
+                            <th><strong>
+                              {ticket.chooseYourProduct === 'webApp' ?
+                                "Domain Name" : "SaaS Product Name"
+                              }
+                            </strong></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>{ticket.name}</td>
+                            <td>{ticket.contactEmail}</td>
+                            <td>{ticket.contactNumber}</td>
+                            <td>{ticket.helpTopic}</td>
+                            <td>{ticket.chooseYourProduct}</td>
+                            <td>{ticket.chooseYourProduct === "webApp" ?
+                              ticket.domain : ticket.saasProductName}</td>
+                          </tr>
+                          <tr>
+                            <td colSpan={6}>
+                              <strong>Subject:</strong> {ticket.subject}
+                            </td>
+                          </tr>
+                          {ticket.messages.map((message, index) => (<React.Fragment key={index}>
+                            <tr>
+                              <td colSpan={1}>
+                                <strong>{message.sentBy === "CLIENT" ? "Me" : "Admin"}:</strong>
+                              </td>
+                              <td colSpan={4}>
+                                {message.message}
+                              </td>
+                              <td colSpan={1}>
+                                <strong>{new Date(message.createdAt as Date).toLocaleString()}</strong>
+                              </td>
+                            </tr>
+                          </React.Fragment>))}
+                          {(
+                            <tr>
+                              <td colSpan={1}>
+                                <strong>Me:</strong>
+                              </td>
+                              <td colSpan={5}>
+                                <RInput
+                                  type="text"
+                                  placeholder="Enter your message"
+                                  value={messageInputs[index] || ''}
+                                  onChange={(e) => handleMessageChange(index, e.target.value)}
+                                />{" "}
+                                <RButton onClick={() => handleUpdateTicket(ticket, index)}><IoMdArrowRoundForward /></RButton>
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              ))
+            )
+            :
+            (<p className={styles.noTickets}>No open tickets available.</p>)
+          }
+        </div>)
+    } else if (activeTab === "Closed") {
+      return (
+        <div className={styles.accordionContainer}>
+          {tickets.length ?
+            (
+              tickets?.map((ticket: ITicket, index: number) => (
+                <div key={index} className={styles.accordionItem}>
+                  <div
+                    className={`${styles.accordionHeader} ${activeAccordion === index ? styles.activeHeader : ""}`}
+                    onClick={() => toggleAccordion(index)}
+                  >
+                    <div>
+                      <strong>Ticket Number:</strong> {String(ticket?._id)}
+                    </div>
+                    <div>
+                      <strong>Status:</strong>{activeTab}
+                    </div>
+                    {/* <div>
+                      <strong>Subject:</strong> {ticket.subject}
+                    </div> */}
+                    <span>
+                      {activeAccordion === index ? <BiCollapse /> : <BiExpand />}
+                    </span>
+                  </div>
+                  {activeAccordion === index && (
+                    <div className={styles.accordionBody}>
+                      <table className={styles.ticketTable}>
+                        <thead>
+                          <tr>
+                            <th><strong>Name</strong></th>
+                            <th><strong>Email</strong></th>
+                            <th><strong>Contact Number</strong></th>
+                            <th><strong>Help Topic</strong></th>
+                            <th><strong>Product</strong></th>
+                            <th><strong>
+                              {ticket.chooseYourProduct === 'webApp' ?
+                                "Domain Name" : "SaaS Product Name"
+                              }
+                            </strong></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>{ticket.name}</td>
+                            <td>{ticket.contactEmail}</td>
+                            <td>{ticket.contactNumber}</td>
+                            <td>{ticket.helpTopic}</td>
+                            <td>{ticket.chooseYourProduct}</td>
+                            <td>{ticket.chooseYourProduct === "webApp" ?
+                              ticket.domain : ticket.saasProductName}</td>
+                          </tr>
+                          <tr>
+                            <td colSpan={6}>
+                              <strong>Subject:</strong> {ticket.subject}
+                            </td>
+                          </tr>
+                          {ticket.messages.map((message, index) => (
+                            <tr key={index}>
+                              <td colSpan={1}>
+                                <strong>{message.sentBy === "CLIENT" ? "Me" : "Admin"}:</strong>
+                              </td>
+                              <td colSpan={4}>
+                                {message.message}
+                              </td>
+                              <td colSpan={1}>
+                                <strong>{new Date(message.createdAt as Date).toLocaleString()}</strong>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              ))
+            )
+            :
+            (<p className={styles.noTickets}>No closed tickets available.</p>)
+          }
+        </div>)
     }
-    const filteredTickets = activeTab === "Open" ? tickets.filter((ticket) => ticket.status === "Open")
-      : tickets.filter((ticket) => ticket.status === "Closed");
-
-
-    return (
-      <div className={styles.accordionContainer}>
-        {filteredTickets.length > 0 ? (
-          filteredTickets?.map((ticket, index) => (
-            <div key={index} className={styles.accordionItem}>
-              <div
-                className={`${styles.accordionHeader} ${activeAccordion === index ? styles.activeHeader : ""}`}
-                onClick={() => toggleAccordion(index)}
-              >
-                <div>
-                  <strong>TokenNo:</strong> {index + 1}
-                </div>
-                <div>
-                  <strong>Status:</strong> {ticket.status}
-                </div>
-                <div>
-                  <strong>Subject:</strong> {ticket.subject}
-                </div>
-                <span className={styles.toggleIcon}>
-                  {activeAccordion === index ? <BiCollapse /> : <BiExpand />}
-                </span>
-              </div>
-              {activeAccordion === index && (
-                <div className={styles.accordionBody}>
-                  <table className={styles.ticketTable}>
-                    <thead>
-                      <tr>
-                        <th><strong>Name</strong></th>
-                        <th><strong>Email</strong></th>
-                        <th><strong>Contact Number</strong></th>
-                        <th><strong>Help Topic</strong></th>
-                        <th><strong>Product</strong></th>
-                        {/* <th><strong>Domain Name</strong></th> */}
-                        <th><strong>Message</strong></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{ticket.name}</td>
-                        <td>{ticket.email}</td>
-                        <td>{ticket.contactNumber}</td>
-                        <td>{ticket.helpTopic}</td>
-                        <td>{ticket.product}</td>
-                        {/* <td>{ticket.domainName}</td> */}
-                        <td>{ticket.message}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
-          ))
-        ) : (
-          <p className={styles.noTickets}>No tickets available.</p>
-        )}
-      </div>
-    );
   };
 
   return (
@@ -288,8 +435,6 @@ const TicketSystem: React.FC = () => {
 };
 
 export default TicketSystem;
-
-
 
 
 

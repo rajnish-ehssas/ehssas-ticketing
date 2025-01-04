@@ -1,58 +1,8 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
-export interface IClient extends Document {
-
-  email: string;
-  companyName: string;
-  serviceType: string;
-  domain?: string;
-  saasProductName?: string;
-  password: string;
-  products?: string;
-}
-interface Client {
-  serviceType: string;
-}
-
-const clientSchema: Schema = new Schema({
-  email: {
-    type: String,
-    required: true,
-  },
-  companyName: {
-    type: String,
-    required: true,
-  },
-  serviceType: {
-    type: String,
-    required: true,
-    enum: ['webApp', 'saasProduct'],
-  },
-  domain: {
-    type: String,
-    default: null,
-    required: function (this: Client) {
-      return this.serviceType === 'webApp';
-    },
-  },
-  saasProductName: {
-    type: String,
-    default: null,
-    required: function (this: Client) {
-      return this.serviceType === 'saasProduct';
-    },
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-}, { timestamps: true });
-
-export const Client: Model<IClient> = mongoose.models.Client || mongoose.model<IClient>('Client', clientSchema);
-
 // Ticket interface and schema
 export interface ITicket extends Document {
-  clientReferenceID: mongoose.Schema.Types.ObjectId; 
+  clientReferenceID: string; // Required client ID reference
   name: string;
   email: string;
   contactNumber: string;
@@ -61,9 +11,16 @@ export interface ITicket extends Document {
   subject: string;
   message: string;
   status: "Open" | "Closed";
+  domainName?: string;
 }
 
 const ticketSchema: Schema = new Schema({
+  clientReferenceID: {
+    type: String,
+    ref: "Client",
+    required: true,
+    unique: true, // Ensure only one ticket document per client
+  },
   name: {
     type: String,
     required: [true, "Name is required."],
@@ -97,13 +54,6 @@ const ticketSchema: Schema = new Schema({
     required: [true, "Product is required."],
     trim: true,
   },
-  domainName: {
-    type: String,
-    default: null,
-    required: [true, "Domain name is required."],
-    trim: true,
-  },
-
   subject: {
     type: String,
     required: [true, "Subject is required."],
@@ -119,6 +69,12 @@ const ticketSchema: Schema = new Schema({
     enum: ["Open", "Closed"],
     default: "Open",
     required: true,
+  },
+  domainName: {
+    type: String,
+    default: null,
+    required: [true, "Domain name is required."],
+    trim: true,
   },
 }, { timestamps: true });
 

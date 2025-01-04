@@ -1,13 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectToDatabase } from "@/mongodb";
+// import { connectToDatabase } from "@/mongodb";
 import { Client } from "@/mongodb/schemas/ClientSchema";
-import { Ticket } from "@/mongodb/schemas/NewTicketSchema";
 import { clientRegistrationMail } from "@/lib/sendEmail";
+import { CLIENT_PASSWORD } from "@/env";
+import { getUserAuth } from "@/lib/dbAuth";
 
 export async function POST(request: NextRequest) {
   try {
+    const userAuth = await getUserAuth();
+    if (!userAuth) {
+      return NextResponse.json({ error: 'User authentication failed' }, { status: 401 });
+    }
+    // const { userId, email, clientReferenceID, roles } = userAuth;
     // Connect to the database
-    await connectToDatabase();
+    // await connectToDatabase();
     // Parse the request body
     const body = await request.json();
     const { email, companyName, serviceType, domain, saasProductName } = body;
@@ -41,42 +47,32 @@ export async function POST(request: NextRequest) {
       serviceType,
       domain,
       saasProductName,
-      password: "Test@123",
+      clientReferenceID: email.split(".")[0] + Date.now(),
+      password: CLIENT_PASSWORD,
     });
 
     if (newClient.email) {
       clientRegistrationMail({
         email: newClient.email,
-        password: "Test@123",
+        password: CLIENT_PASSWORD,
       })
     }
-
-    const newTicket = await Ticket.create({
-      clientReferenceID: newClient._id, // Reference to the created client
-      email: newClient.email,
-      companyName: newClient.companyName,
-      serviceType: newClient.serviceType,
-      domain: newClient.domain,
-      saasProductName: newClient.saasProductName,
-    });
-
     return NextResponse.json(
       {
-        message: "Client created and ticket initialized successfully",
-        client: newClient,
-        ticket: newTicket,
+        message: "Client created Successfully",
+        // client: newClient,
       },
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error saving client and initializing ticket:", error);
+    console.error("Error saving client :", error);
     return NextResponse.json({ error: error || "Internal Server Error" }, { status: 500 });
   }
 }
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
-    await connectToDatabase();
+    // await connectToDatabase();
     const url = new URL(request.url);
     const sortType = url.searchParams.get('sort') || 'name';
     const order = url.searchParams.get('order') || 'asc';

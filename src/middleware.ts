@@ -58,7 +58,6 @@ import { authentication, decrypt, updateSession } from './lib/session';
 
 export async function middleware(req: NextRequest) {
     await authentication(req);
-    console.log('AAAAAAAAAAAAAAAreq', req);
     
     const userNavigatinRoute = req.nextUrl.pathname
     const cookieStore = await cookies()
@@ -80,7 +79,7 @@ export async function middleware(req: NextRequest) {
             try {
                 if (session?.userId) {
                     const response = NextResponse.next();
-                    response.headers.set('userData', JSON.stringify(session))
+                    response.headers.set('userAuth', JSON.stringify(session))
                     return response
                 }
             } catch (error: unknown) {
@@ -130,7 +129,6 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL('/in/en/adminportal', req.nextUrl))
     }
     /*--------------------------------------------TESTED---------------------------------------------------*/
-
     return NextResponse.next();
     /*----------------------------------------Front-end side END-------------------------------------------------- */
 }

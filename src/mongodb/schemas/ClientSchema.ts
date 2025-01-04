@@ -3,6 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 export interface IClient extends Document {
+  clientReferenceID: string;
   email: string;
   companyName: string;
   serviceType: string;
@@ -12,10 +13,22 @@ export interface IClient extends Document {
   products?: string;
   roles: string[];
 }
+
 interface Client {
   serviceType: string;
 }
 const clientSchema: Schema = new Schema({
+  clientReferenceID: {
+    type: String,
+    unique: true, // Enforces uniqueness for the field
+    required: [true, "client Id is required."], // Custom error message for required validation
+    validate: {
+      validator: function (value: string) {
+        return typeof value === 'string' && value.trim() !== ''; // Basic validation for non-empty string
+      },
+      message: "Invalid client Id. It must be a non-empty string.",
+    },
+  },
   email: {
     type: String,
     required: [true, "Email is required."],
@@ -29,7 +42,6 @@ const clientSchema: Schema = new Schema({
     type: String,
     required: true,
   },
-
   serviceType: {
     type: String,
     required: true,
@@ -37,7 +49,6 @@ const clientSchema: Schema = new Schema({
   },
   domain: {
     type: String,
-   
   },
   saasProductName: {
     type: String,
@@ -71,9 +82,8 @@ const clientSchema: Schema = new Schema({
       },
       message: 'Invalid role provided.',
     },
-  },
+  }
 });
-
 clientSchema.pre<IClient>('save', async function (next) {
   if (this.isModified('password')) {
     try {

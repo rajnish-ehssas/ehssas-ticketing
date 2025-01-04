@@ -55,28 +55,30 @@
 
 
 import { NextRequest, NextResponse } from 'next/server';
-import { connectToDatabase } from '@/mongodb';
+// import { connectToDatabase } from '@/mongodb';
 import { Client } from '@/mongodb/schemas/ClientSchema';
 import { createRefreshSession, createSession } from '@/lib/session';
 import bcrypt from 'bcrypt';
+import { getUserAuth } from '@/lib/dbAuth';
 
 export const maxDuration = 60
-export async function GET() {
-  try {
-    await connectToDatabase();
-    // const users = await Client.find();
-    return NextResponse.json("");
-  } catch (error) {
-    return NextResponse.json({ error }, { status: 500 });
-  }
-}
+// export async function GET() {
+//   try {
+//     // await connectToDatabase();
+//     // const users = await Client.find();
+//     return NextResponse.json("");
+//   } catch (error) {
+//     return NextResponse.json({ error }, { status: 500 });
+//   }
+// }
 
 export async function POST(request: NextRequest) {
   try {
-    await connectToDatabase();
+    await getUserAuth();
     const { email, password } = await request.json();
     // Find the user by email
     const user = await Client.findOne({ email });
+    
     if (!user) {
       return NextResponse.json({ error: 'Invalid email.' }, { status: 401 });
     }
@@ -92,7 +94,7 @@ export async function POST(request: NextRequest) {
     await createSession(user._id, user.roles); // for jose
     await createRefreshSession(user._id, user.roles)
     const response = NextResponse.json({ message: 'Login successful', user: user }, { status: 200 });
-    response.headers.set('loginData', "hello thus is logine")
+    response.headers.set('headersData', JSON.stringify({ userId: user._id, roles: user.roles }));
     return response;
     
   } catch (error) {

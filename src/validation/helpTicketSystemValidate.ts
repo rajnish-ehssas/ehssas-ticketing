@@ -1,33 +1,30 @@
 import { z } from 'zod';
 export const ticketSystemValidate = z.object({
     name: z.string().min(3, { message: "Name must be at least 3 characters long" }),
-    email: z.string().email({ message: "Invalid email format" }),
-    contactNumber: z
-        .string()
-        .regex(/^\d{10}$/, { message: "Contact number must be 10 digits long" }),
+    contactEmail: z.string().email({ message: "Invalid email format" }),
+    contactNumber: z.string().regex(/^\d{10}$/, { message: "Contact number must be 10 digits long" }),
     helpTopic: z.string().min(1, { message: "Help topic is required" }),
-    product: z.string().min(1, { message: "Product is required" }),
-    domainName: z
-        .string()
-        .optional(),
+    chooseYourProduct: z.string().min(1, { message: "Product is required" }),
+    domain: z.string().optional(),
+    saasProductName: z.string().optional(),
     subject: z.string().min(1, { message: "Subject is required" }),
-    message: z.string().min(10, { message: "Message must be at least 10 characters long" }),
+    messages: z.string().min(10, { message: "Message must be at least 10 characters long" }),
+})
+// .refine(data => {
+//     if (data.chooseYourProduct === 'webApp' && !data.domain) {
+//         return false;
+//     }
+//     if (data.chooseYourProduct === 'saasProduct' && !data.saasProductName) {
+//         return false;
+//     }
+//     return true;
+// }, {
+//     message: "Domain is required if product is webApp, and saasProductName is required if product is saasProduct",
+//     path: ["chooseYourProduct"], // This will show the error at the chooseYourProduct field
+// });
 
-    status: z.enum(["Open", "Close"], { message: "Status must be 'Open' or 'Close'" }),
-});
 
 export type UserQueryValidation = z.infer<typeof ticketSystemValidate>;
-
-// const validateUserQuery = (data: any) => {
-//     try {
-//         const validatedData = ticketSystemValidate.parse(data);
-//         return validatedData;
-//     } catch (err) {
-//         if (err instanceof z.ZodError) {
-//             console.error("Validation errors:", err.errors);
-//         }
-//     }
-// };
 
 
 

@@ -1,5 +1,5 @@
 import { forgotPasswordMail } from '@/lib/sendEmail';
-import { connectToDatabase } from '@/mongodb';
+// import { connectToDatabase } from '@/mongodb';
 import { Client } from '@/mongodb/schemas/ClientSchema';
 import { PasswordChangeRequest } from '@/mongodb/schemas/PasswordChangeRequestSchema';
 import { NextRequest, NextResponse } from 'next/server';
@@ -8,7 +8,7 @@ import bcrypt from 'bcrypt';
 
 export async function POST(request: NextRequest) {
   try {
-    await connectToDatabase();
+    // await connectToDatabase();
     const { email } = await request.json();
     if (!email) {
       return NextResponse.json(

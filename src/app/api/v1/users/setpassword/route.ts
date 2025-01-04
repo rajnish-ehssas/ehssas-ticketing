@@ -1,4 +1,4 @@
-import { connectToDatabase } from '@/mongodb';
+// import { connectToDatabase } from '@/mongodb';
 import { Client } from '@/mongodb/schemas/ClientSchema';
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
@@ -6,7 +6,7 @@ import { PasswordChangeRequest } from '@/mongodb/schemas/PasswordChangeRequestSc
 
 export async function POST(request: NextRequest) {
     try {
-        await connectToDatabase();
+        // await connectToDatabase();
         const { password, tempPassword, userId } = await request.json();
         const passwordChangeRequest = await PasswordChangeRequest.findOne({ userId });
         if (!passwordChangeRequest) {

@@ -87,7 +87,6 @@ const Page = () => {
               required
             />
           </div>
-
           <div className={styles.formGroup}>
             <label htmlFor="companyName">Company Name</label>
             <input
@@ -99,7 +98,6 @@ const Page = () => {
               required
             />
           </div>
-
           <div className={styles.formGroup}>
             <label htmlFor="serviceType">Service Type</label>
             <select
@@ -114,7 +112,6 @@ const Page = () => {
               <option value="saasProduct">SaaS Product</option>
             </select>
           </div>
-
           {formData.serviceType === "webApp" && (
             <div className={styles.formGroup}>
               <label htmlFor="domain">Domain</label>
@@ -128,7 +125,6 @@ const Page = () => {
               />
             </div>
           )}
-
           {formData.serviceType === "saasProduct" && (
             <div className={styles.formGroup}>
               <label htmlFor="saasProductName">Select SaaS Product</label>

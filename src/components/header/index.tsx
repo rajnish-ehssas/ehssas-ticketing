@@ -16,8 +16,6 @@ const initialState: ActionResponseAuth = {
 const Header: React.FC = () => {
     const router = useRouter();
     const [state, action, isPanding] = useActionState(authHandle, initialState)
-    console.log('state', state);
-
     const [isNavOpen, setIsNavOpen] = useState<boolean>(false);
     const headerRef = useRef<HTMLDivElement | null>(null);
     const toggleNav = () => {

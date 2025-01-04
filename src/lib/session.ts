@@ -119,7 +119,7 @@ import { JWTPayload, SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers';
 import { JWT_SECRET_KEY } from '@/env';
 import { NextRequest, NextResponse } from 'next/server';
-
+// import { headers } from "next/headers";
 const secretKey = JWT_SECRET_KEY
 const encodedKey = new TextEncoder().encode(secretKey)
 
@@ -141,6 +141,7 @@ export async function decrypt(session: string | undefined = '') {
     const { payload } = await jwtVerify(session, encodedKey, {
       algorithms: ['HS256'],
     })
+    
     return payload
   } catch (error) {
     console.error('Failed to verify session-:', error);
@@ -185,12 +186,21 @@ export async function deleteSession() {
 }
 
 export async function authentication(request: NextRequest) {
+  // const headersList = await headers()
+  // console.log('headersList-:', headersList);
+  // const userAgent = JSON.parse(headersList.get('headersData') as string)
+  // console.log('userAgent-:', userAgent);
+  
   const session = request.cookies.get("session")?.value;
+  // console.log('session-:', session);
   if (!session) return;
+  const parsed = await decrypt(session);
+  console.log('parsed-:', parsed);
+  // const user = await Client.findOne({ _id: parsed?.userId });
+  // console.log('user-:', user);
+
 
   // Refresh the session so it doesn't expire
-  // const parsed = await decrypt(session);
-  // console.log('parsed', parsed);
   // let rolesArray = [];
   // if (parsed?.roles) {
   //     if (Array.isArray(parsed.roles)) {
@@ -204,7 +214,9 @@ export async function authentication(request: NextRequest) {
   // const isAdmin = rolesArray.includes('ADMIN');
   // const isClient = rolesArray.includes('CLIENT');
 
-  const res = NextResponse.next();
+  const response = NextResponse.next();
+  response.headers.set('userAuthSession', JSON.stringify(session))
+
   // const cookieStore = await cookies()
   // const UserValue = JSON.stringify({
   //   isAuthenticated: true,
@@ -218,6 +230,6 @@ export async function authentication(request: NextRequest) {
   //   sameSite: 'lax',
   //   path: '/',
   // })
-  
-  return res;
+
+  return response
 }
