@@ -150,7 +150,34 @@ const TicketSystem: React.FC = () => {
       console.error("Error updating ticket:", error);
     }
   }
-
+  const updateFormData = (field: keyof typeof formData, value: string) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [field]: value,
+    }));
+  };
+  const handleDrop = (e: React.DragEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  
+    // Handle text data
+    if (e.dataTransfer.types.includes("text/plain")) {
+      const droppedText = e.dataTransfer.getData("text/plain");
+      updateFormData("messages", formData.messages + droppedText);
+    }
+  
+    // Handle files if required
+    if (e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          updateFormData("messages", formData.messages + event.target.result.toString());
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
   const renderTabContent = () => {
     if (activeTab === "form") {
       return (
@@ -221,7 +248,16 @@ const TicketSystem: React.FC = () => {
           </div>
           <div className={styles.formGroup}>
             <label htmlFor="messages">Message</label>
-            <textarea id="messages" name="messages" rows={3} value={formData.messages} onChange={handleInputChange} />
+            <textarea
+              id="messages"
+              name="messages"
+              rows={3}
+              value={formData.messages}
+              onChange={handleInputChange}
+              onDragOver={(e) => e.preventDefault()} // Prevent default to allow drop
+              onDrop={(e) => handleDrop(e)}
+            />
+            {/* <textarea id="messages" name="messages" rows={3} value={formData.messages} onChange={handleInputChange} /> */}
             {errors.messages && <p className={styles.error}>{errors.messages}</p>}
           </div>
           <button className={styles.submitButton} onClick={handleSubmit}>

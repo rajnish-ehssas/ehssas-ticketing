@@ -58,7 +58,6 @@ import { authentication, decrypt, updateSession } from './lib/session';
 
 export async function middleware(req: NextRequest) {
     await authentication(req);
-    
     const userNavigatinRoute = req.nextUrl.pathname
     const cookieStore = await cookies()
     const cookie = cookieStore.get('session')?.value
